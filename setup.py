@@ -12,7 +12,7 @@ version = re.search(
     ).group(1)
  
 with open('README.md', 'rb') as f:
-    long_descr = f.read().decode('utf-8')
+    long_description = f.read().decode('utf-8')
  
  
 setup(
@@ -21,9 +21,10 @@ setup(
     entry_points={
         'console_scripts': ['pellish = pellish.pellish:main']
     },
+    license='GPLv3',
     version=version,
     description='Python command line application for generating Pell-like sequences.',
-    long_description=long_descr,
+    long_description=long_description,
     author='Nathan Matteson',
     author_email='matteson@obstructures.org',
     url='',
