@@ -3,7 +3,7 @@ Though hardly useful for most, `pellish` generates series of Pell-like numbers
 based on minimum, maximum, and required values supplied by the user. Meaning
 that at least one of the series will contain the required value, and all
 values will be within the minimum and maximum specified. I find such a 
-sequence useful in publication design, in fact in the design of most things.  
+sequence useful in publication design, in fact in the design of many things.  
 
 ## Installation
 Typical `python setup.py install` should suffice.
@@ -34,8 +34,8 @@ series.
 
 ## How it works
 `pellish` generates an initial Pell-like sequence based on your required
-value, x(n), by finding suitable values for x(n-1) and x(n-1), with 
-x(n) = 2 * x(n-1) + x(n-2), x(n-2) >= min. 
+value, x*(n)*, by finding suitable values for x*(n–1)* and x*(n–2)*, with 
+x*(n)* = 2 * x*(n–1)* + x*(n–2)*, x*(n–2)* >= min. 
 
 If possible, given your minimum, it will create multiple series of lesser 
 values, based on the differences in the initial series. It will proceed
@@ -45,7 +45,9 @@ differences of prior series, until it reaches your maximum value and/or
 a series of fewer than 3 values.
 
 ## Et cetera
-I use same bizarre lingo when I use Pell-like sequences.
+I've made up some silly lingo when I use Pell-like sequences in my design 
+work. Very non-technical, but it's hard to understand some of the options
+and internal methods without understanding them.
 
 *Diagonals* are series of numbers in the pellish matrix,  whose
 pairs converge towards 1 : √2.
