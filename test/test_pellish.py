@@ -13,7 +13,7 @@ class PellishTest(unittest.TestCase):
         self.fixture = Pellish()
         self.fixture.min_ = .5
         self.fixture.max_ = 5
-        self.fixture.p = 3.5
+        self.fixture.req_ = 3.5
 
     def tearDown(self):
         del self.fixture

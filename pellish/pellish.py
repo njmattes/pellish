@@ -8,11 +8,10 @@ from math import sqrt
 
 class Pellish(object):
 
-    def __init__(self):
-        self.pell = None
-        self.p = 103
-        self.max_ = 206
-        self.min_ = .5
+    def __init__(self, min_, req_, max_):
+        self.req_ = req_
+        self.max_ = max_
+        self.min_ = min_
         self.fp = './pellish.csv'
 
     @property
@@ -20,19 +19,34 @@ class Pellish(object):
         return len(str(max(map(max, zip(*self.build_all_series()))))) + 1
 
     def build_series(self, a, b):
+        """Create a Pellish series based on two initial values.
+
+        :param float a: n_0
+        :param float b: n_1
+        :returns: 1-dimensional series of initial Pellish values
+        :rtype: list
+        """
         if self.min_ % 1 == 0:
             a = int(a)
             b = int(b)
-        xs = [a, b]
+
+        series = [a, b]
+
         while b <= self.max_:
             c = a + 2 * b
-            xs.append(c)
+            series.append(c)
             a = b
             b = c
-        return xs[:-1]
+
+        return series[:-1]
 
     def build_initial_series(self):
-        b = self.p
+        """Build initial series based on required, minimum, and maximum values.
+
+        :returns: 1-dimensional series of initial Pellish values
+        :rtype: list
+        """
+        b = self.req_
         a = b / (1 + sqrt(2))
         a = round(a / self.min_) * self.min_
         xs = []
@@ -69,10 +83,10 @@ class Pellish(object):
                 all_series.remove(series)
 
         l = len(max(all_series, key=len))
-        for i in xrange(len(all_series)):
-            for j in xrange(i):
+        for i in range(len(all_series)):
+            for j in range(i):
                 all_series[i].insert(0, None)
-            for j in xrange(l - len(all_series[i])):
+            for j in range(l - len(all_series[i])):
                 all_series[i].insert(len(all_series[i]), None)
 
         return all_series
@@ -90,8 +104,8 @@ class Pellish(object):
     def get_minor_triplets(self):
         triplets = []
         all_series = self.build_all_series()
-        for i in xrange(len(all_series)):
-            for j in xrange(len(all_series[i])):
+        for i in range(len(all_series)):
+            for j in range(len(all_series[i])):
                 try:
                     t = [
                         all_series[i][j],
@@ -107,8 +121,8 @@ class Pellish(object):
     def get_major_triplets(self):
         triplets = []
         all_series = self.build_all_series()
-        for i in xrange(len(all_series)):
-            for j in xrange(len(all_series[i])):
+        for i in range(len(all_series)):
+            for j in range(len(all_series[i])):
                 try:
                     t = [
                         all_series[i][j],
@@ -137,9 +151,9 @@ class Pellish(object):
     def get_diagonals(self):
         diagonals = []
         all_series = self.build_all_series()
-        for i in xrange(len(all_series[0])):
+        for i in range(len(all_series[0])):
             diagonal = [all_series[0][i], ]
-            for j in xrange(1, len(all_series)):
+            for j in range(1, len(all_series)):
                 try:
                     x = all_series[j][i+j]
                     if x is not None:
@@ -204,7 +218,7 @@ def main():
 
     p = Pellish()
     p.min_ = args.minimum
-    p.p = args.required
+    p.req_ = args.required
     p.max_ = args.maximum
 
     if args.csv:
@@ -219,30 +233,30 @@ def main():
                 all_series = p.build_all_series()
 
                 for s in all_series:
-                    print ' '.join([str(x).rjust(p.longest_digit, ' ')
+                    print(' '.join([str(x).rjust(p.longest_digit, ' ')
                                     if x is not None
                                     else ''.rjust(p.longest_digit, ' ')
-                                    for x in s])
+                                    for x in s]))
 
             if args.triplets:
                 minor, major = p.get_triplets()
-                print '##################################'
-                print 'Minor triplets [√2, (1 + √2) / √2]'
-                print '##################################'
-                print p.print_triplets(minor)
-                print '##################################'
-                print 'Major triplets [(1 + √2) / √2, √2]'
-                print '##################################'
-                print p.print_triplets(major)
+                print('##################################')
+                print('Minor triplets [√2, (1 + √2) / √2]')
+                print('##################################')
+                print(p.print_triplets(minor))
+                print('##################################')
+                print('Major triplets [(1 + √2) / √2, √2]')
+                print('##################################')
+                print(p.print_triplets(major))
 
             if args.diagonals:
-                print '#########'
-                print 'Diagonals'
-                print '#########'
-                print p.print_diagonals(p.get_diagonals())
+                print('#########')
+                print('Diagonals')
+                print('#########')
+                print(p.print_diagonals(p.get_diagonals()))
 
         except:
-            print 'Creation of Pellish series failed. Miserably.'
+            print('Creation of Pellish series failed. Miserably.')
 
 
 if __name__ == '__main__':
