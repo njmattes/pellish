@@ -34,8 +34,8 @@ series.
 
 ## How it works
 `pellish` generates an initial Pell-like sequence based on your required
-value, x(n), by finding suitable values for $x_{n-1}$ and $x_{n-2}$, with 
-$x_{n} = 2 * x_{n-1} + x_{n-2}, x_{n-2} >= min$. 
+value, x(n), by finding suitable values for x(n-1) and x(n-1), with 
+x(n) = 2 * x(n-1) + x(n-2), x(n-2) >= min. 
 
 If possible, given your minimum, it will create multiple series of lesser 
 values, based on the differences in the initial series. It will proceed
