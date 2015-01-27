@@ -34,8 +34,9 @@ series.
 
 ## How it works
 `pellish` generates an initial Pell-like sequence based on your required
-value, x(n), by finding suitable values for x(n-1) and x(n-1), with 
-x(n) = 2 * x(n-1) + x(n-2), x(n-2) >= min. 
+value, x(n), by finding suitable values for $x_{n-1}$ and $x_{n-2}$, with 
+$x_{n} = 2 * x_{n-1} + x_{n-2}, x_{n-2} >= min$. 
+
 If possible, given your minimum, it will create multiple series of lesser 
 values, based on the differences in the initial series. It will proceed
 with this until the initial value of a series is less than your specified 
@@ -45,10 +46,14 @@ a series of fewer than 3 values.
 
 ## Et cetera
 I use same bizarre lingo when I use Pell-like sequences.
+
 *Diagonals* are series of numbers in the pellish matrix,  whose
 pairs converge towards 1 : √2.
+
 *Triplets* refer to groups of three adjacent values whose pairs are in the 
 (approximate) proportions 1 : √2, 1 : (1 + √2) / √2. and 1 : 1 + √2 
+
 A *minor* triplet is one whose smallest numbers approximate the proportion 
 1 : √2.
+
 A *major* triplet's largest numbers approximate 1 : √2.
