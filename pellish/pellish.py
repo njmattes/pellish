@@ -3,7 +3,7 @@
 
 __version__ = '0.0.1'
 
-from math import sqrt
+from math import sqrt, ceil
 
 
 class Pellish(object):
@@ -28,9 +28,6 @@ class Pellish(object):
         :returns: 1-dimensional series of Pellish values
         :rtype: list
         """
-        if self.min_ % 1 == 0:
-            a = int(a)
-            b = int(b)
 
         series = [a, b]
 
@@ -48,9 +45,14 @@ class Pellish(object):
         :returns: 1-dimensional series of initial Pellish values
         :rtype: list
         """
+
         b = self.req_
-        if self.min_ == self.req_:
-            a = b
+
+        if self.min_ == self.req_ or self.req_ == 3 * self.min_:
+            a = b = self.min_
+            return self.build_series(a, b)
+        elif self.req_ < 3 * self.min_:
+            a = self.min_
             return self.build_series(a, b)
         else:
             a = b / (1 + sqrt(2))
@@ -77,6 +79,7 @@ class Pellish(object):
         :returns: 2-dimensional array of Pellish values
         :rtype: list
         """
+
         all_series = []
         s = self.build_initial_series()
 
@@ -84,13 +87,17 @@ class Pellish(object):
             all_series.append(s)
             s = self.build_next(s)
 
-        while all_series[0][1] >= all_series[0][0] >= self.min_:
-            s = self.build_previous(all_series[1])
-            all_series.insert(0, s)
+        if len(all_series) > 1:
+            while all_series[0][1] >= all_series[0][0] >= self.min_:
+                s = self.build_previous(all_series[1])
+                all_series.insert(0, s)
 
         for series in all_series:
-            if series[0] < self.min_:
+            if 0 < series[0] < self.min_:
                 all_series.remove(series)
+
+        all_series = [[int(x) if self.min_ % 1 == 0 else x
+                      for x in s] for s in all_series]
 
         l = len(max(all_series, key=len))
         for i in range(len(all_series)):
@@ -179,20 +186,6 @@ class Pellish(object):
             self.get_major_triplets(),
         ]
 
-    def print_triplets(self, triplets, lb=True):
-        """Convenience for pretty printing triplets.
-
-        :param list triplets: list of triplets to print
-        :param bool lb: whether or not to include line breaks
-        :return: pretty string
-        :rtype: str
-        """
-        return '{}'.format('\n' if lb else ', ').join([' '.join(
-            [str(x).rjust(self.longest_digit, ' ')
-             if x is not None
-             else ''.rjust(self.longest_digit, ' ')
-             for x in t]) for t in triplets])
-
     def get_diagonals(self):
         """Retrieve all diagonals in the 2-dimensional Pellish array.
 
@@ -214,8 +207,41 @@ class Pellish(object):
                 diagonals.append(diagonal)
         return sorted(diagonals)
 
+    def print_triplets(self, triplets, lb=True):
+        """Pretty print triplets in three columns.
+
+        :param list triplets: list of triplets to print
+        :param bool lb: whether or not to include line breaks
+        :return: pretty string
+        :rtype: str
+        """
+
+        z = zip(*[
+            [' '.join(
+                [str(x).rjust(self.longest_digit, ' ')
+                 if x is not None
+                 else ''.rjust(self.longest_digit, ' ')
+                 for x in t])
+             for t in triplets[:int(len(triplets)/3.)]],
+            [' '.join(
+                [str(x).rjust(self.longest_digit, ' ')
+                 if x is not None
+                 else ''.rjust(self.longest_digit, ' ')
+                 for x in t])
+             for t in triplets[int(len(triplets)/3.):int(len(triplets)/3.*2)]],
+            [' '.join(
+                [str(x).rjust(self.longest_digit, ' ')
+                 if x is not None
+                 else ''.rjust(self.longest_digit, ' ')
+                 for x in t])
+             for t in triplets[int(len(triplets)/3.*2):]],
+        ])
+        return '{}'.format('\n' if lb else '    ')\
+            .join(['{}    {}    {}'.format(a, b, c)
+                   for a, b, c in z])
+
     def print_diagonals(self, diagonals, lb=True):
-        """Convenience for pretty printing diagonals.
+        """Print diagonals horizontally.
 
         :param list triplets: list of triplets to print
         :param bool lb: whether or not to include line breaks
@@ -243,6 +269,10 @@ class Pellish(object):
 
 
 def main():
+
+    from colorama import init, Fore, Style
+
+    init(autoreset=True)
 
     def create_args():
         import argparse
@@ -290,20 +320,21 @@ def main():
             if not args.diagonals and not args.triplets:
 
                 for s in p.build_all_series():
-                    print(' '.join([str(x).rjust(p.longest_digit, ' ')
-                                    if x is not None
-                                    else ''.rjust(p.longest_digit, ' ')
-                                    for x in s]))
+                    print(' '.join(
+                        [str(x).rjust(p.longest_digit, ' ')
+                         if x is not None
+                         else ''.rjust(p.longest_digit, ' ')
+                         for x in s]))
 
             if args.triplets:
                 minor, major = p.get_triplets()
-                print('##################################')
-                print('Minor triplets [√2, (1 + √2) / √2]')
-                print('##################################')
+                print('##############')
+                print(Style.BRIGHT + 'Minor triplets')
+                print('##############')
                 print(p.print_triplets(minor))
-                print('##################################')
-                print('Major triplets [(1 + √2) / √2, √2]')
-                print('##################################')
+                print('##############')
+                print('Major triplets')
+                print('##############')
                 print(p.print_triplets(major))
 
             if args.diagonals:
