@@ -1,9 +1,8 @@
 # Pellish
-Though hardly useful for most, `pellish` generates series of Pell-like numbers
+`pellish` generates a matrix of Pell-like series
 based on minimum, maximum, and required values supplied by the user. Meaning
 that at least one of the series will contain the required value, and all
-values will be within the minimum and maximum specified. I find such a 
-sequence useful in publication design, in fact in the design of many things.  
+values will be within the minimum and maximum specified.  
 
 ## Installation
 Typical `python setup.py install` should suffice.
@@ -25,7 +24,7 @@ at `PATH`.
 
 ## Examples
 `pellish 1 29 500` will generate the Pell series up to 408, and then 
-a matrix of Pell-like series that contain the differences of the prior 
+the pellish matrix of series that contain the differences of the prior 
 series.
 
 `pellish 2 6 500` will do the same but starting with the Pell-Lucas series.
