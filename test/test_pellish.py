@@ -10,10 +10,7 @@ from pellish.pellish import Pellish
 class PellishTest(unittest.TestCase):
 
     def setUp(self):
-        self.fixture = Pellish()
-        self.fixture.min_ = .5
-        self.fixture.max_ = 5
-        self.fixture.req_ = 3.5
+        self.fixture = Pellish(.5, 3.5, 5.)
 
     def tearDown(self):
         del self.fixture
