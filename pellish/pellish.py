@@ -3,7 +3,7 @@
 
 __version__ = '0.0.1'
 
-from math import sqrt, ceil
+from math import sqrt
 
 
 class Pellish(object):
