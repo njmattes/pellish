@@ -9,7 +9,7 @@ from math import sqrt
 class Pellish(object):
 
     def __init__(self, min_, req_, max_):
-        if (min_ + 2 * req_) > max_:
+        if max_ / (3 + 2 * sqrt(2)) < min_ and (min_ + 2 * req_) > max_:
             raise Exception('Invalid starting parameters.')
         self.req_ = req_
         self.max_ = max_
