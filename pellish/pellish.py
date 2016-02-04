@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from math import sqrt
 
 __version__ = '0.0.1'
-
-from math import sqrt
 
 
 class Pellish(object):
