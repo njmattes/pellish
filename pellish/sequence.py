@@ -121,9 +121,7 @@ class IntegerSequence(object):
     def build_next(self, series):
         a = series[1] - series[0]
         b = series[2] - series[1]
-        if a == series[0] and b == series[1]:
-            return []
-        if a == series[1] and b == series[2]:
+        if self.n_shape == 1 and a == 1 and b == 1:
             return []
         return self.build_series([a, b])
 
