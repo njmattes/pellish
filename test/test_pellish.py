@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.insert(0, os.path.abspath('..'))
-from pellish.pellish import Pellish
+from pellish.pellish2 import Pellish
 
 
 class PellishTest(unittest.TestCase):
@@ -76,7 +76,6 @@ class PellishTest(unittest.TestCase):
               [1.0, 1.5, 2.0],
               [1.5, 2.5, 3.5],
               [2.0, 3.5, 5.0],],],
-            t
         )
 
     def test_get_diagonals(self):

@@ -1,112 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-__version__ = '0.0.1'
-
+from pellish.sequence import IntegerSequence
 from math import sqrt
 
 
-class Pellish(object):
+__version__ = '0.0.1'
+
+
+class Pellish(IntegerSequence):
 
     def __init__(self, min_, req_, max_):
         if max_ / (3 + 2 * sqrt(2)) < min_ and (min_ + 2 * req_) > max_:
             raise Exception('Invalid starting parameters.')
-        self.req_ = req_
-        self.max_ = max_
-        self.min_ = min_
+        super(Pellish, self).__init__(min_, req_, max_)
         self.fp = './pellish.csv'
+        self.n_shape = 2
+        self.bootstrap = 1 + sqrt(2)
 
-    @property
-    def longest_digit(self):
-        return len(str(max(map(max, zip(*self.build_all_series()))))) + 1
+    def f(self, arr):
 
-    def build_series(self, a, b):
-        """Create a Pellish series based on two initial values.
+        return arr[0] + 2 * arr[1]
 
-        :param float a: n_0
-        :param float b: n_1
-        :returns: 1-dimensional series of Pellish values
-        :rtype: list
-        """
+    def f_reverse(self, arr):
 
-        series = [a, b]
-
-        while b <= self.max_:
-            c = a + 2 * b
-            series.append(c)
-            a = b
-            b = c
-
-        return series[:-1]
-
-    def build_initial_series(self):
-        """Build initial series based on required, minimum, and maximum values.
-
-        :returns: 1-dimensional series of initial Pellish values
-        :rtype: list
-        """
-
-        b = self.req_
-
-        if self.min_ == self.req_ or self.req_ == 3 * self.min_:
-            a = b = self.min_
-            return self.build_series(a, b)
-        elif self.req_ < 3 * self.min_:
-            a = self.min_
-            return self.build_series(a, b)
-        else:
-            a = b / (1 + sqrt(2))
-            a = round(a / self.min_) * self.min_
-        xs = []
-
-        while a >= self.min_:
-            a_ = b - a * 2
-            b = a
-            a = a_
-            if a > 0 and a not in xs:
-                xs.append(a)
-            if b > 0:
-                if len(xs) <= 1 or b not in xs:
-                    xs.append(b)
-
-        xs = sorted(xs)
-
-        return self.build_series(xs[0], xs[1])
-
-    def build_all_series(self):
-        """Build all series based on required, minimum, and maximum values.
-
-        :returns: 2-dimensional array of Pellish values
-        :rtype: list
-        """
-
-        all_series = []
-        s = self.build_initial_series()
-
-        while len(s) > 2:
-            all_series.append(s)
-            s = self.build_next(s)
-
-        if len(all_series) > 1:
-            while all_series[0][1] >= all_series[0][0] >= self.min_:
-                s = self.build_previous(all_series[1])
-                all_series.insert(0, s)
-
-        for series in all_series:
-            if 0 < series[0] < self.min_:
-                all_series.remove(series)
-
-        all_series = [[int(x) if self.min_ % 1 == 0 else x
-                      for x in s] for s in all_series]
-
-        l = len(max(all_series, key=len))
-        for i in range(len(all_series)):
-            for j in range(i):
-                all_series[i].insert(0, None)
-            for j in range(l - len(all_series[i])):
-                all_series[i].insert(len(all_series[i]), None)
-
-        return all_series
+        return arr[1] - 2 * arr[0]
 
     def build_next(self, series):
         """Given a series, build the next series.
@@ -117,7 +34,7 @@ class Pellish(object):
         """
         a = series[1] - series[0]
         b = series[2] - series[1]
-        return self.build_series(a, b)
+        return self.build_series([a, b])
 
     def build_previous(self, series):
         """Given a series, build the series two steps in front. Ie,
@@ -129,7 +46,7 @@ class Pellish(object):
         """
         a = series[0] / 2.
         b = series[1] / 2.
-        return self.build_series(a, b)
+        return self.build_series([a, b])
 
     def get_minor_triplets(self):
         """Build all minor triplets in the 2-dimensional Pellish array.
@@ -348,4 +265,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    p = Pellish(1, 3, 100)
+    print(p.build_all_series())
+    # main()
