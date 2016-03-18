@@ -23,7 +23,7 @@ class PellishTest(unittest.TestCase):
         )
 
     def test_build_series(self):
-        p = self.fixture.build_series(1, 2)
+        p = self.fixture.build_series([1, 2])
         self.failUnlessEqual(
             [1.0, 2.0, 5.0],
             p
@@ -76,6 +76,7 @@ class PellishTest(unittest.TestCase):
               [1.0, 1.5, 2.0],
               [1.5, 2.5, 3.5],
               [2.0, 3.5, 5.0],],],
+            t
         )
 
     def test_get_diagonals(self):
