@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from pellish.sequence import IntegerSequence
 from math import sqrt
+from pellish.sequence import IntegerSequence
 
 
 __version__ = '0.0.1'
