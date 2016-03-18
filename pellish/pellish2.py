@@ -34,7 +34,7 @@ class Pellish(IntegerSequence):
         """
         a = series[1] - series[0]
         b = series[2] - series[1]
-        return self.build_series(a, b)
+        return self.build_series([a, b])
 
     def build_previous(self, series):
         """Given a series, build the series two steps in front. Ie,
