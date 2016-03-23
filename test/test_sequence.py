@@ -41,7 +41,7 @@ class SequenceTest(unittest.TestCase):
         s = self.fixture.build_initial_series()
         p = self.fixture.build_previous(s)
         self.failUnlessEqual(
-            [-1., 0., 1., 2., 3., 4., 5., 6., 7., 8., 9., 10.],
+            [],
             p
         )
 

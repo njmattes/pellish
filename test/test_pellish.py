@@ -41,7 +41,7 @@ class PellishTest(unittest.TestCase):
         s = self.fixture.build_initial_series()
         p = self.fixture.build_previous(s)
         self.failUnlessEqual(
-            [.25, .75, 1.75, 4.25],
+            [.5, 1., 2.5],
             p
         )
 
