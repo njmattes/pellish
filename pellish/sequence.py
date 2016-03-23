@@ -13,6 +13,7 @@ class IntegerSequence(object):
         self.n_shape = 1
         self.bootstrap = None
         self.fp = './sequence.csv'
+        self.two_d = False
 
     @property
     def longest_digit(self):
@@ -87,67 +88,66 @@ class IntegerSequence(object):
 
         if self.min_ == self.req_:
             a = b = self.min_
-            return self.build_series([self.min_ for i in range(self.n_shape)])
+            return self.build_series([self.min_ for _ in range(self.n_shape)])
 
         if self.req_ == c:
             a = b = self.min_
-            return self.build_series([self.min_ for i in range(self.n_shape)])
+            return self.build_series([self.min_ for _ in range(self.n_shape)])
 
         if self.req_ < c:
             a = self.min_
-            arr = [self.min_ for i in range(self.n_shape)]
+            arr = [self.min_ for _ in range(self.n_shape)]
             arr[-1] = b
             return self.build_series(arr)
 
         return self.build_series(self.find_initial_a(b))
 
     def find_initial_a(self, b):
-        a = self.bootstrap_a(b)
-        series = []
+        init_series = [b]
+        for _ in range(self.n_shape - 1):
+            init_series.insert(0, self.bootstrap_a(init_series[0]))
+        a = init_series[0]
+        series = init_series
 
         while a > self.min_:
-            a_ = self.f_reverse([a, b])
-            b = a
-            a = a_
-            if a >= self.min_ and a not in series:
-                series.append(a)
+            a_ = self.f_reverse(series)
+            if a_ >= self.min_ and a_ not in series:
+                series.insert(0, a_)
             if b > 0:
                 if len(series) <= 1 or b not in series:
                     series.append(b)
+            init_series.insert(0, a_)
+            a = a_
 
-        series = sorted(series)
-        return series[:self.n_shape]
+        # series = sorted(series)
+        return series[1:self.n_shape+1]
 
     def build_next(self, series):
-        a = series[1] - series[0]
-        b = series[2] - series[1]
-        if self.n_shape == 1 and a == 1 and b == 1:
-            return []
-        return self.build_series([a, b])
+        return []
 
     def build_previous(self, series):
-        a = series[0] - 1.
-        b = series[0]
-        return self.build_series([a, b])
+        return []
 
     def build_all_series(self):
+
+        if not self.two_d:
+            return [self.build_initial_series()]
 
         all_series = []
         s = self.build_initial_series()
 
-        while len(s) > 2:
+        while len(s) > self.n_shape:
             all_series.append(s)
             s = self.build_next(s)
 
         if len(all_series) > 1:
-            while all_series[0][1] >= all_series[0][0] >= self.min_:
-                s = self.build_previous(all_series[1])
+            while all(i >= self.min_ for i in all_series[0][:self.n_shape]):
+                s = self.build_previous(all_series[0])
                 all_series.insert(0, s)
 
         for series in all_series:
             if 0 < series[0] < self.min_:
                 all_series.remove(series)
-
         all_series = [[int(x) if self.min_ % 1 == 0 else x
                       for x in s] for s in all_series]
 

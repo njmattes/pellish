@@ -16,6 +16,7 @@ class Pellish(IntegerSequence):
         self.fp = './pellish.csv'
         self.n_shape = 2
         self.bootstrap = 1 + sqrt(2)
+        self.two_d = True
 
     def f(self, arr):
 
@@ -44,8 +45,10 @@ class Pellish(IntegerSequence):
         :return: the next Pellish series
         :rtype: list
         """
-        a = series[0] / 2.
-        b = series[1] / 2.
+        if len(series) < 3:
+            raise
+        a = (series[1] - series[0]) / 2.
+        b = (series[2] - series[1]) / 2.
         return self.build_series([a, b])
 
     def get_minor_triplets(self):
@@ -265,6 +268,7 @@ def main():
 
 
 if __name__ == '__main__':
-    p = Pellish(1, 3, 100)
+    # p = Pellish(1, 3, 100)
+    p = Pellish(.5, 3.5, 5.)
     print(p.build_all_series())
     # main()
